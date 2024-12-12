@@ -1,39 +1,43 @@
-import { ScrollView, StyleSheet, Text, View, Image, Pressable } from 'react-native'
-import React from 'react'
-import { Movie } from '../config/entities/Movie'
+import React from 'react';
+import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { Movie } from '../config/entities/Movie';
 
-interface Movies {
+interface MoviesProps {
   movies: Movie[];
   height: number;
+  backgroundColor?: string;
+  loadMore: () => void; 
 }
 
-export default function Slider({ movies, height }: Movies) {
+export default function Slider({ movies, height, backgroundColor = '#fff', loadMore }: MoviesProps) {
   return (
-    <View>
-      <ScrollView style = {styles.contenedor} horizontal={true}>
-        {movies.map((item) => (
-          <Image style = {styles.imagen} key = {item.id}
+    <View style={[styles.contenedor, { backgroundColor, height }]}>
+      <FlatList
+        data={movies}
+        horizontal
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Image
+            style={styles.imagen}
             source={{
               uri: `https://image.tmdb.org/t/p/original${item.poster}`,
             }}
           />
-        ))}
-      </ScrollView>
-      <Pressable>
-         <Text>Siguiente página</Text>
-      </Pressable>
+        )}
+        onEndReached={loadMore} 
+        onEndReachedThreshold={0.5} 
+      />
     </View>
-  )
-
+  );
 }
 
 const styles = StyleSheet.create({
   contenedor: {
-    height: 300,
-  }, 
+    flex: 1,
+    justifyContent: 'center',
+  },
   imagen: {
     width: 200,
-    //height: 200,
-    margin: 1
-  }
-})
+    margin: 5,
+  },
+});
