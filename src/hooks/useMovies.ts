@@ -6,28 +6,43 @@ import ResultMovie from "../config/entities/ResultMovie";
 export const useMovies = () => {
     const [nowPlaying, setNowPlaying] = useState<ResultMovie | null>(null);
     const [loading, setLoading] = useState(false);
-  
+    const [page, setPage] = useState(1); 
+
     const loadMovies = async () => {
-      if (loading) return; 
-      setLoading(true);
-      const nextPage = nowPlaying?.page ? nowPlaying.page + 1 : 1;
-      const movies = await FilmAdapter.getMovies({ route: FilmAdapter.ROUTES.nowPlaying, page: nextPage });
-      if (movies) {
-        setNowPlaying((prev) => ({
-          ...movies,
-          movies: [...(prev?.movies || []), ...movies.movies], 
-        }));
-      }
-      setLoading(false);
-    };
-  
+        setLoading(true);
+        const movies = await FilmAdapter.getMovies({ route: FilmAdapter.ROUTES.nowPlaying, page });
+
+        if (movies != null) {
+            const newMovies = movies.movies.filter((newMovie) => {
+                return !nowPlaying?.movies.some((existingMovie) => existingMovie.id === newMovie.id);
+            });
+
+            setNowPlaying((prevState) => {
+                if (prevState) {
+                    return {
+                        ...prevState,
+                        movies: [...prevState.movies, ...newMovies],
+                    };
+                }
+                return { ...movies, movies: newMovies };
+            });
+        }
+        setLoading(false);
+    }
+
+    const loadMoreMovies = async () => {
+        if (!loading && nowPlaying?.movies.length) {
+            setPage(prevPage => prevPage + 1);  
+        }
+    }
+
     useEffect(() => {
-      loadMovies();
-    }, []);
-  
+        loadMovies();
+    }, [page]); 
+
     return {
-      nowPlaying,
-      loading,
-      loadMoreMovies: loadMovies, 
-    };
-  };
+        nowPlaying,
+        loading,
+        loadMoreMovies
+    }
+}

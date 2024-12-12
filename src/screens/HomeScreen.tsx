@@ -4,7 +4,7 @@ import { useMovies } from '../hooks/useMovies';
 import Slider from '../components/Slider';
 
 export default function HomeScreen() {
-  const { nowPlaying, loading, loadMoreMovies } = useMovies();
+  const { nowPlaying, loading, loadMoreMovies } = useMovies();  
 
   return (
     <View style={styles.container}>
@@ -13,7 +13,8 @@ export default function HomeScreen() {
           movies={nowPlaying.movies}
           height={300}
           backgroundColor="#f5f5f5"
-          loadMore={loadMoreMovies}
+          loadMore={loadMoreMovies}  
+          horizontal={true}  
         />
       ) : (
         <ActivityIndicator size="large" color="#000" />

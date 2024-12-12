@@ -24,8 +24,8 @@ export default function App() {
               if (focused) return  ( <Ionicons name="film" size={size} color={color} /> )
                 else return ( <Ionicons name="film-outline" size={size} color={color} /> )
             case "Settings":
-              if (focused) return ( <Ionicons name="build" size={size} color={color} /> )
-                else return ( <Ionicons name="build-outline" size={size} color={color} /> )
+              if (focused) return ( <Ionicons name="film" size={size} color={color} /> )
+                else return ( <Ionicons name="film-outline" size={size} color={color} /> )
           }
 
           return ( <Ionicons name="bulb-outline" size={size} color={color} /> )
@@ -35,8 +35,8 @@ export default function App() {
       })}
       
       >
-        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Películas' }}/>
-        <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Configuración' }}/>
+        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Películas en horizontal' }}/>
+        <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Películas en vertical' }}/>
       </Tab.Navigator>
     </NavigationContainer>
   );

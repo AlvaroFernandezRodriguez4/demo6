@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { FlatList, StyleSheet, View, Image } from 'react-native';
 import { Movie } from '../config/entities/Movie';
 
 interface MoviesProps {
@@ -7,22 +7,25 @@ interface MoviesProps {
   height: number;
   backgroundColor?: string;
   loadMore: () => void; 
+  horizontal?: boolean;  
 }
 
-export default function Slider({ movies, height, backgroundColor = '#fff', loadMore }: MoviesProps) {
+export default function Slider({ movies, height, backgroundColor = '#fff', loadMore, horizontal = true }: MoviesProps) {
   return (
     <View style={[styles.contenedor, { backgroundColor, height }]}>
       <FlatList
         data={movies}
-        horizontal
+        horizontal={horizontal}  
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Image
-            style={styles.imagen}
-            source={{
-              uri: `https://image.tmdb.org/t/p/original${item.poster}`,
-            }}
-          />
+          <View style={styles.movieContainer}>
+            <Image
+              style={styles.imagen}
+              source={{
+                uri: `https://image.tmdb.org/t/p/original${item.poster}`,
+              }}
+            />
+          </View>
         )}
         onEndReached={loadMore} 
         onEndReachedThreshold={0.5} 
@@ -36,8 +39,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  movieContainer: {
+    alignItems: 'center'
+  },
   imagen: {
-    width: 200,
-    margin: 5,
+    width: 250,  
+    height: 300, 
   },
 });
